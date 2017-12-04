@@ -51,11 +51,16 @@ SSL_CTX* InitServerCTX(void)
 {   const SSL_METHOD *method;
     SSL_CTX *ctx;
  
-    OpenSSL_add_all_algorithms();  /* load & register all cryptos, etc. */
-    SSL_load_error_strings();   /* load all error messages */
 #if OPENSSL_API_COMPAT >= 0x10100000L
+    const OPENSSL_INIT_SETTINGS *settings = OPENSSL_INIT_new();
+    OPENSSL_init_ssl(
+       OPENSSL_INIT_LOAD_SSL_STRINGS | OPENSSL_INIT_LOAD_CRYPTO_STRINGS,
+       settings);
     method = TLS_server_method();  /* create new server-method instance */
 #else
+    SSL_library_init();
+    OpenSSL_add_all_algorithms();  /* load & register all cryptos, etc. */
+    SSL_load_error_strings();   /* load all error messages */
     method = SSLv23_server_method();  /* create new server-method instance */
 #endif
     ctx = SSL_CTX_new(method);   /* create new context from method */
@@ -151,7 +156,6 @@ int main(int count, char *strings[])
         printf("Usage: %s <portnum>\n", strings[0]);
         exit(0);
     }
-    SSL_library_init();
  
     portnum = strings[1];
     ctx = InitServerCTX();        /* initialize SSL */

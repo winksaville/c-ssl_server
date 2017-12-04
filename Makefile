@@ -53,5 +53,6 @@ ssl_server: ssl_server.c Makefile
 gencert:
 	openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout mycert.pem -out mycert.pem
 
+.PHONY: clean
 clean:
-	rm ./ssl_server
+	@rm ./ssl_server
