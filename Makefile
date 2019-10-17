@@ -47,7 +47,7 @@ LFLAGS=-L/usr/lib -L$(OPENSSL_DIR) -l:$(OPENSSL_LIB) -lcrypto
 all: ssl_server
 
 ssl_server: ssl_server.c Makefile
-	gcc $(CFLAGS) -DOPENSSL_API_COMPAT=$(OPENSSL_API_COMPAT) -o ssl_server ssl_server.c $(LFLAGS)
+	gcc $(CFLAGS) -gdwarf-5 -DOPENSSL_API_COMPAT=$(OPENSSL_API_COMPAT) -o ssl_server ssl_server.c $(LFLAGS)
 
 .PHONY: gencert
 gencert:
